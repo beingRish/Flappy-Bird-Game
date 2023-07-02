@@ -12,9 +12,9 @@ function App() {
 
   useEffect(() => {
     let interval = null;
-    if(startGame) {
-      interval = setInterval( () => {
-        if(birdPosition < GAME_HEIGHT - BIRD_SIZE) {
+    if (startGame) {
+      interval = setInterval(() => {
+        if (birdPosition < GAME_HEIGHT - BIRD_SIZE) {
           setBirdPosition(birdPosition => birdPosition + 4);
         }
       }, 24);
@@ -24,13 +24,27 @@ function App() {
 
   return (
     <div className='App'>
-      <div style={{
-        position: 'relative',
-        "backgroundColor": "blue",
-        width: `${GAME_HEIGHT}px`,
-        height: `${GAME_WIDTH}px`,
+      <div 
+        onClick={
+          () => {
+            const newBirdPosition = birdPosition - 50
+            if(newBirdPosition > 0) {
+              setBirdPosition(birdPosition => birdPosition - 50);
+            }
+            else{
+              setBirdPosition(0);
+            }
+          }
+        }
+        style={{
+          position: 'relative',
+          "backgroundColor": "blue",
+          width: `${GAME_HEIGHT}px`,
+          height: `${GAME_WIDTH}px`,
       }}>
-        <div style={{
+
+      <div 
+        style={{
           position: "absolute",
           backgroundColor: "red",
           width: `${BIRD_SIZE}px`,
@@ -39,7 +53,9 @@ function App() {
           top: `${birdPosition}px`,
         }} />
       </div>
-        <button onClick={() => {setStartGame(true)}}>Start Game</button>
+
+      <button onClick={() => { setStartGame(true) }}>Start Game</button>
+
     </div>
   )
 }
