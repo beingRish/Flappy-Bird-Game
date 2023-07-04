@@ -11,8 +11,20 @@ function App() {
   const [startGame, setStartGame] = useState(false);
   const [birdPosition, setBirdPosition] = useState(GAME_HEIGHT / 2 - BIRD_SIZE / 2);
   const [obstacleHeight, setObstacleHeight] = useState(100);
-  const [obstacleLeftPosition, setObstacleLeftPosition] = useState(450);
+  const [obstacleLeftPosition, setObstacleLeftPosition] = useState(GAME_WIDTH - OBSTACLE_WIDTH);
   const [score, setScore] = useState(0)
+
+  useEffect(() => {
+    let interval = null;
+    if (startGame) {
+      interval = setInterval(() => {
+        if (obstacleLeftPosition > 0) {
+          setObstacleLeftPosition(obstPos => obstPos - 6);
+        }
+      }, 24);
+    }
+    return () => clearInterval(interval);
+  }, [startGame, obstacleLeftPosition])
 
   useEffect(() => {
     let interval = null;
@@ -26,7 +38,7 @@ function App() {
     return () => clearInterval(interval);
   }, [startGame, birdPosition])
 
-  const bottomObstacle = GAME_HEIGHT - obstacleHeight - GAME_DIFFICULTY_GAP;
+  const bottomObstacleHeight = GAME_HEIGHT - (obstacleHeight + GAME_DIFFICULTY_GAP);
 
   return (
     <div className='App'>
@@ -56,9 +68,16 @@ function App() {
         width: `${OBSTACLE_WIDTH}px`,
         height: `${obstacleHeight}px`,
         backgroundColor: 'green'
-      }}>
+      }}/>
 
-      </div>
+      <div style={{
+        position: 'absolute',
+        top: `${obstacleHeight + GAME_DIFFICULTY_GAP}px`,
+        left: `${obstacleLeftPosition}px`,
+        width: `${OBSTACLE_WIDTH}px`,
+        height: `${bottomObstacleHeight}px`,
+        backgroundColor: 'green'
+      }}/>
 
         {/** Bird */}
       <div 
