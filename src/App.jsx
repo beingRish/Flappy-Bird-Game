@@ -21,10 +21,28 @@ function App() {
         if (obstacleLeftPosition > 0) {
           setObstacleLeftPosition(obstPos => obstPos - 6);
         }
+        else {
+          setObstacleLeftPosition(GAME_WIDTH - OBSTACLE_WIDTH);
+          setObstacleHeight(Math.floor(Math.random() * (GAME_HEIGHT - GAME_DIFFICULTY_GAP)));
+          setScore(score => score + 1);
+        }
       }, 24);
     }
     return () => clearInterval(interval);
   }, [startGame, obstacleLeftPosition])
+
+  useEffect( () => {
+    if(startGame) {
+      const collidedWithUpperObsticle = birdPosition < obstacleHeight;
+      const collidedWithLowerObsticle = birdPosition > obstacleHeight + GAME_DIFFICULTY_GAP;
+      if(obstacleLeftPosition < BIRD_SIZE && (collidedWithUpperObsticle || collidedWithLowerObsticle)) {
+        setStartGame(false);
+        // make bird fall
+        
+      }
+    }
+
+  }, [startGame, obstacleLeftPosition, birdPosition, obstacleHeight])
 
   useEffect(() => {
     let interval = null;
@@ -42,57 +60,57 @@ function App() {
 
   return (
     <div className='App'>
-      <div 
+      <div
         onClick={
           () => {
             const newBirdPosition = birdPosition - 50
-            if(newBirdPosition > 0) {
+            if (newBirdPosition > 0) {
               setBirdPosition(birdPosition => birdPosition - 50);
             }
-            else{
+            else {
               setBirdPosition(0);
             }
           }
         }
-        style={{  
+        style={{
+          overflow: 'hidden',
           position: 'relative',
           "backgroundColor": "blue",
           width: `${GAME_HEIGHT}px`,
           height: `${GAME_WIDTH}px`,
-      }}>
+        }}>
 
-      <div style={{
-        position: 'absolute',
-        top: `${0}px`,
-        left: `${obstacleLeftPosition}px`,
-        width: `${OBSTACLE_WIDTH}px`,
-        height: `${obstacleHeight}px`,
-        backgroundColor: 'green'
-      }}/>
+        <div style={{
+          position: 'absolute',
+          top: `${0}px`,
+          left: `${obstacleLeftPosition}px`,
+          width: `${OBSTACLE_WIDTH}px`,
+          height: `${obstacleHeight}px`,
+          backgroundColor: 'green'
+        }} />
 
-      <div style={{
-        position: 'absolute',
-        top: `${obstacleHeight + GAME_DIFFICULTY_GAP}px`,
-        left: `${obstacleLeftPosition}px`,
-        width: `${OBSTACLE_WIDTH}px`,
-        height: `${bottomObstacleHeight}px`,
-        backgroundColor: 'green'
-      }}/>
+        <div style={{
+          position: 'absolute',
+          top: `${obstacleHeight + GAME_DIFFICULTY_GAP}px`,
+          left: `${obstacleLeftPosition}px`,
+          width: `${OBSTACLE_WIDTH}px`,
+          height: `${bottomObstacleHeight}px`,
+          backgroundColor: 'green'
+        }} />
 
         {/** Bird */}
-      <div 
-        style={{  
-          position: "absolute",
-          backgroundColor: "red",
-          width: `${BIRD_SIZE}px`,
-          height: `${BIRD_SIZE}px`,
-          borderRadius: "50%",
-          top: `${birdPosition}px`,
-        }} />
+        <div
+          style={{
+            position: "absolute",
+            backgroundColor: "red",
+            width: `${BIRD_SIZE}px`,
+            height: `${BIRD_SIZE}px`,
+            borderRadius: "50%",
+            top: `${birdPosition}px`,
+          }} />
       </div>
-
+      {score}
       <button onClick={() => { setStartGame(true) }}>Start Game</button>
-
     </div>
   )
 }
