@@ -4,10 +4,14 @@ import './App.css'
 const BIRD_SIZE = 20;
 const GAME_HEIGHT = 500;
 const GAME_WIDTH = 500;
+const GAME_DIFFICULTY_GAP = 120;
+const OBSTACLE_WIDTH = 50;
 
 function App() {
   const [startGame, setStartGame] = useState(false);
   const [birdPosition, setBirdPosition] = useState(GAME_HEIGHT / 2 - BIRD_SIZE / 2);
+  const [obstacleHeight, setObstacleHeight] = useState(100);
+  const [obstacleLeftPosition, setObstacleLeftPosition] = useState(450);
   const [score, setScore] = useState(0)
 
   useEffect(() => {
@@ -21,6 +25,8 @@ function App() {
     }
     return () => clearInterval(interval);
   }, [startGame, birdPosition])
+
+  const bottomObstacle = GAME_HEIGHT - obstacleHeight - GAME_DIFFICULTY_GAP;
 
   return (
     <div className='App'>
@@ -36,15 +42,27 @@ function App() {
             }
           }
         }
-        style={{
+        style={{  
           position: 'relative',
           "backgroundColor": "blue",
           width: `${GAME_HEIGHT}px`,
           height: `${GAME_WIDTH}px`,
       }}>
 
+      <div style={{
+        position: 'absolute',
+        top: `${0}px`,
+        left: `${obstacleLeftPosition}px`,
+        width: `${OBSTACLE_WIDTH}px`,
+        height: `${obstacleHeight}px`,
+        backgroundColor: 'green'
+      }}>
+
+      </div>
+
+        {/** Bird */}
       <div 
-        style={{
+        style={{  
           position: "absolute",
           backgroundColor: "red",
           width: `${BIRD_SIZE}px`,
